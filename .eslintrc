@@ -10,7 +10,9 @@
   "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb-base"],
   "rules": {
     "arrow-body-style": "warn",
+    "arrow-parens": "off",
     "comma-dangle": "off",
+    "no-return-assign": "off",
     "no-use-before-define": "off"
   }
 }

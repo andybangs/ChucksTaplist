@@ -8,7 +8,7 @@ const TaplistHeader = () => (
     <TaplistHeaderColumn title="Brewery" flex={2} />
     <TaplistHeaderColumn title="Name" flex={2} />
     <TaplistHeaderColumn title="Price" />
-    <TaplistHeaderColumn title="Origin" />
+    <TaplistHeaderColumn title="Loc" />
     <TaplistHeaderColumn title="ABV" />
   </View>
 );

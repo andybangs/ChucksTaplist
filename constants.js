@@ -1,10 +1,12 @@
 export const colors = {
+  black: '#000',
   blue: 'blue',
   brown: 'brown',
   green: 'green',
   lightgray: '#dce1de',
   orange: 'orange',
   purple: 'purple',
+  teal: '#028090',
   white: '#fff'
 };
 
