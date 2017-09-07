@@ -35,10 +35,9 @@ TaplistItem.propTypes = {
 
 const styles = StyleSheet.create({
   row: {
-    minHeight: 80,
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: 80,
     justifyContent: 'space-around',
     paddingTop: 2.5,
     paddingBottom: 2.5,

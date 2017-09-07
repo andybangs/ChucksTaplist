@@ -1,3 +1,5 @@
+export const appBarHeight = 45;
+
 export const colors = {
   black: '#000',
   blue: 'blue',
@@ -6,7 +8,8 @@ export const colors = {
   lightgray: '#dce1de',
   orange: 'orange',
   purple: 'purple',
-  teal: '#028090',
+  teal: 'rgb(19, 128, 143)',
+  tealTransparent: 'rgba(19, 128, 143, 0.9)',
   white: '#fff'
 };
 
