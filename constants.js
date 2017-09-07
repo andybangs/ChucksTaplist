@@ -13,6 +13,9 @@ export const colors = {
   white: '#fff'
 };
 
+export const url =
+  'https://qz2twkw52m.execute-api.us-west-2.amazonaws.com/prod/taplist';
+
 export const EXAMPLE_TAPLIST = {
   data: [
     {

@@ -10,7 +10,7 @@ import ActionButton from './components/ActionButton';
 import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
 import { compareNum, compareStr } from './util';
-import { appBarHeight, EXAMPLE_TAPLIST, colors } from './constants';
+import { appBarHeight, colors, url } from './constants';
 
 const SCROLL_THRESHOLD = 150;
 
@@ -46,19 +46,22 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      data: EXAMPLE_TAPLIST.data,
+      data: [],
       desc: false,
-      sortColumn: 'tap',
-      scrollY: 0
+      refreshing: false,
+      scrollY: 0,
+      sortColumn: 'tap'
     };
+  }
+
+  componentWillMount() {
+    this.fetchData();
   }
 
   componentWillUpdate() {
     LayoutAnimation.configureNext({
       duration: 550,
-      update: {
-        type: LayoutAnimation.Types.easeInEaseOut
-      }
+      update: { type: LayoutAnimation.Types.easeInEaseOut }
     });
   }
 
@@ -67,6 +70,19 @@ export default class App extends React.Component {
 
     if (this.state.scrollY < SCROLL_THRESHOLD || y < SCROLL_THRESHOLD) {
       this.setState({ scrollY: y });
+    }
+  };
+
+  fetchData = async () => {
+    this.setState({ refreshing: true });
+
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      this.setState({ data: json['body-json'].data, refreshing: false });
+    } catch (err) {
+      this.setState({ refreshing: false });
     }
   };
 
@@ -93,7 +109,7 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { data, desc, sortColumn, scrollY } = this.state;
+    const { data, desc, refreshing, scrollY, sortColumn } = this.state;
     const sortedData = data.sort(
       COMPARE_FUNCTIONS[sortColumn][desc ? 'desc' : 'asc']
     );
@@ -113,6 +129,8 @@ export default class App extends React.Component {
           extraData={this.state}
           keyExtractor={item => item.tap}
           onScroll={this.onScroll}
+          onRefresh={this.fetchData}
+          refreshing={refreshing}
           initialNumToRender={9}
           ref={ref => (this.taplist = ref)}
         />
