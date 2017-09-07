@@ -1,5 +1,11 @@
 import React from 'react';
-import { FlatList, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  LayoutAnimation,
+  StatusBar,
+  StyleSheet,
+  View
+} from 'react-native';
 import ActionButton from './components/ActionButton';
 import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
@@ -45,6 +51,15 @@ export default class App extends React.Component {
       sortColumn: 'tap',
       scrollY: 0
     };
+  }
+
+  componentWillUpdate() {
+    LayoutAnimation.configureNext({
+      duration: 550,
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut
+      }
+    });
   }
 
   onScroll = ev => {
