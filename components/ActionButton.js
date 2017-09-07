@@ -13,6 +13,7 @@ export default class ActionButton extends React.Component {
   componentWillMount() {
     this.animatedOpacity = new Animated.Value(0);
     this.animatedScale = new Animated.Value(1);
+    this.animatedShadowRadius = new Animated.Value(3);
   }
 
   componentDidMount() {
@@ -24,17 +25,25 @@ export default class ActionButton extends React.Component {
   }
 
   onPressIn = () => {
-    Animated.spring(this.animatedScale, { toValue: 0.9 }).start();
+    Animated.parallel([
+      Animated.spring(this.animatedScale, { toValue: 0.9 }),
+      Animated.spring(this.animatedShadowRadius, { toValue: 1 })
+    ]).start();
   };
 
   onPressOut = () => {
-    Animated.spring(this.animatedScale, { toValue: 1 }).start();
+    Animated.parallel([
+      Animated.spring(this.animatedScale, { toValue: 1 }),
+      Animated.spring(this.animatedShadowRadius, { toValue: 3 })
+    ]).start();
+
     this.props.onPress();
   };
 
   render() {
     const animatedStyle = {
       opacity: this.animatedOpacity,
+      shadowRadius: this.animatedShadowRadius,
       transform: [{ scale: this.animatedScale }]
     };
 
@@ -60,16 +69,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    width: 56,
-    height: 56,
+    width: 54,
+    height: 54,
     bottom: 40,
     right: 30,
-    borderRadius: 28,
+    borderRadius: 27,
     backgroundColor: colors.teal,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3
+    shadowOpacity: 0.5
   },
   text: {
     fontSize: 24,
