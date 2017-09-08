@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  AppState,
+  AsyncStorage,
   FlatList,
   LayoutAnimation,
   StatusBar,
@@ -10,9 +12,7 @@ import ActionButton from './components/ActionButton';
 import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
 import { compareNum, compareStr } from './util';
-import { appBarHeight, colors, url } from './constants';
-
-const SCROLL_THRESHOLD = 150;
+import { appBarHeight, colors } from './constants';
 
 const COMPARE_FUNCTIONS = {
   tap: {
@@ -41,11 +41,18 @@ const COMPARE_FUNCTIONS = {
   }
 };
 
+const LAST_UPDATED = '@ChucksTaplist:lastUpdated';
+const REFRESH_INTERVAL = 3600000; // one hour
+const SCROLL_THRESHOLD = 150;
+const URL =
+  'https://qz2twkw52m.execute-api.us-west-2.amazonaws.com/prod/taplist';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      appState: 'inactive',
       data: [],
       desc: false,
       refreshing: false,
@@ -58,11 +65,19 @@ export default class App extends React.Component {
     this.fetchData();
   }
 
+  componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
+  }
+
   componentWillUpdate() {
     LayoutAnimation.configureNext({
       duration: 550,
       update: { type: LayoutAnimation.Types.easeInEaseOut }
     });
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
   onScroll = ev => {
@@ -77,13 +92,43 @@ export default class App extends React.Component {
     this.setState({ refreshing: true });
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(URL);
       const json = await response.json();
 
       this.setState({ data: json['body-json'].data, refreshing: false });
+
+      try {
+        await AsyncStorage.setItem(LAST_UPDATED, JSON.stringify(Date.now()));
+      } catch (err) {
+        // Error saving data
+      }
     } catch (err) {
+      // Error fetching data
       this.setState({ refreshing: false });
     }
+  };
+
+  handleAppStateChange = async nextAppState => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      try {
+        const lastUpdated = await AsyncStorage.getItem(LAST_UPDATED);
+
+        if (lastUpdated !== null) {
+          const timeLapsed = Date.now() - parseInt(lastUpdated, 10);
+
+          if (timeLapsed > REFRESH_INTERVAL) {
+            this.fetchData();
+          }
+        }
+      } catch (err) {
+        // Error retrieving data
+      }
+    }
+
+    this.setState({ appState: nextAppState });
   };
 
   scrollToTop = () => {
