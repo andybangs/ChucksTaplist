@@ -11,33 +11,33 @@ import {
 import ActionButton from './components/ActionButton';
 import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
-import { compareNum, compareStr } from './util';
+import { compareAsc, compareDesc, parseNumber, parsePrice } from './util';
 import { appBarHeight, colors } from './constants';
 
 const COMPARE_FUNCTIONS = {
   tap: {
-    asc: compareNum('tap'),
-    desc: compareNum('tap', true)
+    asc: compareAsc('tap', parseNumber),
+    desc: compareDesc('tap', parseNumber)
   },
   brewery: {
-    asc: compareStr('brewery'),
-    desc: compareStr('brewery', true)
+    asc: compareAsc('brewery'),
+    desc: compareDesc('brewery')
   },
   name: {
-    asc: compareStr('beer'),
-    desc: compareStr('beer', true)
+    asc: compareAsc('beer'),
+    desc: compareDesc('beer')
   },
   price: {
-    asc: compareStr('pint'),
-    desc: compareStr('pint', true)
+    asc: compareAsc('pint', parsePrice),
+    desc: compareDesc('pint', parsePrice)
   },
   loc: {
-    asc: compareStr('origin'),
-    desc: compareStr('origin', true)
+    asc: compareAsc('origin'),
+    desc: compareDesc('origin')
   },
   abv: {
-    asc: compareNum('abv'),
-    desc: compareNum('abv', true)
+    asc: compareAsc('abv', parseNumber),
+    desc: compareDesc('abv', parseNumber)
   }
 };
 
