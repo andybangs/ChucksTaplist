@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -10,6 +11,10 @@ import {
 import { colors } from '../constants';
 
 export default class ActionButton extends React.Component {
+  animatedOpacity: any;
+  animatedScale: any;
+  animatedShadowRadius: any;
+
   componentWillMount() {
     this.animatedOpacity = new Animated.Value(0);
     this.animatedScale = new Animated.Value(1);

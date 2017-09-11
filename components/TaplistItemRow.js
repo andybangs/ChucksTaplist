@@ -1,10 +1,20 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import TaplistItemColumn from './TaplistItemColumn';
 import { colors } from '../constants';
+import { CTItem } from '../types';
 
-export default class TaplistItem extends React.PureComponent {
+type Props = {
+  item: CTItem,
+  separators: {
+    highlight: Function,
+    unhighlight: Function
+  }
+};
+
+export default class TaplistItem extends React.PureComponent<*, Props, *> {
   render() {
     const { item, separators } = this.props;
     const bevType = item.class.split(' ')[1];

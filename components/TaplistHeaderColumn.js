@@ -1,10 +1,23 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import AnimatedArrow from './AnimatedArrow';
 import { colors } from '../constants';
 
-const TaplistHeaderColumn = ({ flex, title, desc, isSelected, onPress }) => {
+const TaplistHeaderColumn = ({
+  flex,
+  title,
+  desc,
+  isSelected,
+  onPress
+}: {
+  flex?: number,
+  title: string,
+  desc: boolean,
+  isSelected: boolean,
+  onPress: Function
+}) => {
   const selectedContainerStyle = isSelected && styles.selectedContainer;
   const textStyle = isSelected ? styles.selectedText : styles.text;
 

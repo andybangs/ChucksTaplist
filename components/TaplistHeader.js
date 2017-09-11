@@ -1,10 +1,19 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import TaplistHeaderColumn from './TaplistHeaderColumn';
 import { appBarHeight, colors } from '../constants';
 
-const TaplistHeader = ({ desc, sortColumn, onColumnPress }) => (
+const TaplistHeader = ({
+  desc,
+  sortColumn,
+  onColumnPress
+}: {
+  desc: boolean,
+  sortColumn: string,
+  onColumnPress: Function
+}) => (
   <View style={styles.container}>
     <TaplistHeaderColumn
       title="#"

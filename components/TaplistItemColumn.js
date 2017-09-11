@@ -1,9 +1,19 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants';
+import { CTBevType } from '../types';
 
-const TaplistItemColumn = ({ bevType, value, flex }) => {
+const TaplistItemColumn = ({
+  bevType,
+  value,
+  flex
+}: {
+  bevType: CTBevType,
+  value: string,
+  flex?: number
+}) => {
   return (
     <View style={[styles.container, { flex }]}>
       <Text style={[styles.text, styles[bevType]]}>{value}</Text>

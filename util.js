@@ -1,6 +1,12 @@
+// @flow
+import { CTCompareFunction } from './types';
+
 // COMPARE FUNCTIONS
 
-export function compareAsc(property, parseFn = toUpperCase) {
+export function compareAsc(
+  property: string,
+  parseFn?: Function = toUpperCase
+): CTCompareFunction {
   return (a, b) => {
     const parsedA = parseFn(a[property]);
     const parsedB = parseFn(b[property]);
@@ -11,7 +17,10 @@ export function compareAsc(property, parseFn = toUpperCase) {
   };
 }
 
-export function compareDesc(property, parseFn = toUpperCase) {
+export function compareDesc(
+  property: string,
+  parseFn?: Function = toUpperCase
+): CTCompareFunction {
   return (a, b) => {
     const parsedA = parseFn(a[property]);
     const parsedB = parseFn(b[property]);
@@ -24,20 +33,20 @@ export function compareDesc(property, parseFn = toUpperCase) {
 
 // PARSE FUNCTIONS
 
-export function parseNumber(str) {
-  const parsedStr = parseFloat(str);
+export function parseNumber(val: string | number): number {
+  const parsedStr = parseFloat(val);
 
   return Number.isNaN(parsedStr) ? 0 : parsedStr;
 }
 
-export function parsePrice(str) {
-  if (str[0] !== '$') throw new Error('Invalid input');
+export function parsePrice(val: string): number {
+  if (val[0] !== '$') throw new Error('Invalid input');
 
-  const parsedStr = parseFloat(str.slice(1));
+  const parsedStr = parseFloat(val.slice(1));
 
   return Number.isNaN(parsedStr) ? 0 : parsedStr;
 }
 
-export function toUpperCase(str) {
-  return str.toUpperCase();
+export function toUpperCase(val: string): string {
+  return val.toUpperCase();
 }

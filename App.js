@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import {
   AppState,
   AsyncStorage,
@@ -13,6 +14,22 @@ import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
 import { compareAsc, compareDesc, parseNumber, parsePrice } from './util';
 import { appBarHeight, colors } from './constants';
+import {
+  CTAppState,
+  CTFlatList,
+  CTMap,
+  CTSortColumn,
+  CTSyntheticScrollEvent
+} from './types';
+
+type State = {
+  appState: CTAppState,
+  data: Array<CTMap>,
+  desc: boolean,
+  refreshing: boolean,
+  scrollY: number,
+  sortColumn: CTSortColumn
+};
 
 const COMPARE_FUNCTIONS = {
   tap: {
@@ -47,19 +64,17 @@ const SCROLL_THRESHOLD = 150;
 const URL =
   'https://qz2twkw52m.execute-api.us-west-2.amazonaws.com/prod/taplist';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
+export default class App extends React.Component<*, *, State> {
+  taplist: ?CTFlatList;
 
-    this.state = {
-      appState: 'inactive',
-      data: [],
-      desc: false,
-      refreshing: false,
-      scrollY: 0,
-      sortColumn: 'tap'
-    };
-  }
+  state = {
+    appState: 'inactive',
+    data: [],
+    desc: false,
+    refreshing: false,
+    scrollY: 0,
+    sortColumn: 'tap'
+  };
 
   componentWillMount() {
     this.fetchData();
@@ -80,7 +95,7 @@ export default class App extends React.Component {
     AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
-  onScroll = ev => {
+  onScroll = (ev: CTSyntheticScrollEvent): void => {
     const { y } = ev.nativeEvent.contentOffset;
 
     if (this.state.scrollY < SCROLL_THRESHOLD || y < SCROLL_THRESHOLD) {
@@ -108,7 +123,7 @@ export default class App extends React.Component {
     }
   };
 
-  handleAppStateChange = async nextAppState => {
+  handleAppStateChange = async (nextAppState: CTAppState) => {
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
@@ -132,10 +147,12 @@ export default class App extends React.Component {
   };
 
   scrollToTop = () => {
-    this.taplist.scrollToOffset({ x: 0, y: 0, animated: true });
+    if (this.taplist) {
+      this.taplist.scrollToOffset({ x: 0, y: 0, animated: true });
+    }
   };
 
-  selectColumn = sortColumn => {
+  selectColumn = (sortColumn: CTSortColumn) => {
     this.setState({ sortColumn });
   };
 
@@ -143,7 +160,7 @@ export default class App extends React.Component {
     this.setState({ desc: !this.state.desc });
   };
 
-  onHeaderColumnPress = column => {
+  onHeaderColumnPress = (column: CTSortColumn) => {
     if (this.state.sortColumn !== column) {
       this.selectColumn(column);
     } else {

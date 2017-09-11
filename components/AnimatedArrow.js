@@ -1,9 +1,17 @@
+// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Easing, StyleSheet } from 'react-native';
 import { colors } from '../constants';
 
-export default class AnimatedArrow extends React.Component {
+type Props = {
+  desc: boolean
+};
+
+export default class AnimatedArrow extends React.Component<*, Props, *> {
+  animatedRotation: any;
+  animatedFontSize: any;
+
   componentWillMount() {
     this.animatedRotation = new Animated.Value(this.props.desc ? 1 : 0);
     this.animatedFontSize = new Animated.Value(1);
@@ -16,7 +24,7 @@ export default class AnimatedArrow extends React.Component {
     }).start();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.desc !== this.props.desc) {
       Animated.timing(this.animatedRotation, {
         toValue: this.props.desc ? 0 : 1,
