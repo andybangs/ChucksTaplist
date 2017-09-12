@@ -1,35 +1,23 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants';
 import { CTBevType } from '../types';
 
 const TaplistItemColumn = ({
-  bevType,
   value,
-  flex
+  bevType = null,
+  flex = 1
 }: {
-  bevType: CTBevType,
   value: string,
+  bevType?: CTBevType,
   flex?: number
 }) => {
   return (
     <View style={[styles.container, { flex }]}>
-      <Text style={[styles.text, styles[bevType]]}>{value}</Text>
+      <Text style={[styles.text, styles[bevType || 'default']]}>{value}</Text>
     </View>
   );
-};
-
-TaplistItemColumn.defaultProps = {
-  bevType: null,
-  flex: 1
-};
-
-TaplistItemColumn.propTypes = {
-  bevType: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  flex: PropTypes.number
 };
 
 const styles = StyleSheet.create({
@@ -38,6 +26,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16
+  },
+  default: {
+    color: colors.black
   },
   cider: {
     color: colors.orange

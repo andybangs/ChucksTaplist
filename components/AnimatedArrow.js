@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Animated, Easing, StyleSheet } from 'react-native';
 import { colors } from '../constants';
 
@@ -50,10 +49,6 @@ export default class AnimatedArrow extends React.Component<*, Props, *> {
     );
   }
 }
-
-AnimatedArrow.propTypes = {
-  desc: PropTypes.bool
-};
 
 const styles = StyleSheet.create({
   text: {

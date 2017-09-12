@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import TaplistItemColumn from './TaplistItemColumn';
 import { colors } from '../constants';
@@ -37,11 +36,6 @@ export default class TaplistItem extends React.PureComponent<*, Props, *> {
     );
   }
 }
-
-TaplistItem.propTypes = {
-  item: PropTypes.object.isRequired,
-  separators: PropTypes.object.isRequired
-};
 
 const styles = StyleSheet.create({
   row: {

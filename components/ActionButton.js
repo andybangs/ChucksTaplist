@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Animated,
   Easing,
@@ -64,10 +63,6 @@ export default class ActionButton extends React.Component {
     );
   }
 }
-
-ActionButton.propTypes = {
-  onPress: PropTypes.func.isRequired
-};
 
 const styles = StyleSheet.create({
   container: {

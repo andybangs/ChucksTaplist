@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import TaplistHeaderColumn from './TaplistHeaderColumn';
 import { appBarHeight, colors } from '../constants';
@@ -55,12 +54,6 @@ const TaplistHeader = ({
     />
   </View>
 );
-
-TaplistHeader.propTypes = {
-  desc: PropTypes.bool,
-  sortColumn: PropTypes.string.isRequired,
-  onColumnPress: PropTypes.func.isRequired
-};
 
 const styles = StyleSheet.create({
   container: {
