@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
+  Alert,
   AppState,
   AsyncStorage,
   FlatList,
@@ -9,6 +10,7 @@ import {
   StyleSheet,
   View
 } from 'react-native';
+import differenceBy from 'lodash.differenceby';
 import ActionButton from './components/ActionButton';
 import TaplistHeader from './components/TaplistHeader';
 import TaplistItemRow from './components/TaplistItemRow';
@@ -17,21 +19,28 @@ import { appBarHeight, colors } from './constants';
 import {
   CTAppState,
   CTFlatList,
-  CTMap,
+  CTItem,
   CTSortColumn,
   CTSyntheticScrollEvent
 } from './types';
 
+type Props = {};
+
 type State = {
   appState: CTAppState,
-  data: Array<CTMap>,
+  data: Array<CTItem>,
   desc: boolean,
   refreshing: boolean,
   scrollY: number,
   sortColumn: CTSortColumn
 };
 
-const COMPARE_FUNCTIONS = {
+const COMPARE_FUNCTIONS: {
+  [string]: {
+    asc: Function,
+    desc: Function
+  }
+} = {
   tap: {
     asc: compareAsc('tap', parseNumber),
     desc: compareDesc('tap', parseNumber)
@@ -64,7 +73,7 @@ const SCROLL_THRESHOLD = 150;
 const URL =
   'https://qz2twkw52m.execute-api.us-west-2.amazonaws.com/prod/taplist';
 
-export default class App extends React.Component<*, *, State> {
+export default class App extends React.Component<*, Props, State> {
   taplist: ?CTFlatList;
 
   state = {
@@ -89,6 +98,17 @@ export default class App extends React.Component<*, *, State> {
       duration: 550,
       update: { type: LayoutAnimation.Types.easeInEaseOut }
     });
+  }
+
+  componentDidUpdate(_: Props, prevState: State) {
+    if (prevState.data !== this.state.data) {
+      const { data } = this.state;
+      const newData: Array<CTItem> = differenceBy(data, prevState.data, 'beer');
+
+      if (newData.length > 0 && newData.length < Math.floor(data.length / 2)) {
+        this.showAlert(newData);
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -154,6 +174,16 @@ export default class App extends React.Component<*, *, State> {
 
   selectColumn = (sortColumn: CTSortColumn) => {
     this.setState({ sortColumn });
+  };
+
+  showAlert = (items: Array<CTItem>) => {
+    const noun = items.length === 1 ? 'beer' : 'beers';
+    const title = `${items.length} new ${noun} on tap!`;
+    const message = items
+      .map(item => `${item.tap}. ${item.brewery}–${item.beer}`)
+      .join('\n');
+
+    Alert.alert(title, message, [{ text: 'OK' }]);
   };
 
   toggleDesc = () => {

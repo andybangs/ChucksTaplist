@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import { colors } from '../constants';
 
-export default class ActionButton extends React.Component {
+type Props = {
+  onPress: Function
+};
+
+export default class ActionButton extends React.Component<*, Props, *> {
   animatedOpacity: any;
   animatedScale: any;
   animatedShadowRadius: any;
